@@ -1,0 +1,24 @@
+{
+  "manifest_version": 3,
+  "name": "Spotify Synced Lyrics PiP",
+  "version": "2.0",
+  "description": "Tampilkan lirik Spotify synced di jendela mengambang (PiP).",
+  "permissions": ["activeTab", "scripting"],
+  "host_permissions": ["*://open.spotify.com/*", "https://lrclib.net/*"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://open.spotify.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["main-world.js"],
+      "matches": ["*://open.spotify.com/*"]
+    }
+  ]
+}
