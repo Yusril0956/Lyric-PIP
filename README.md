@@ -1,53 +1,78 @@
 # Spotify Synced Lyrics PiP
 
-A Chrome/Edge/Brave browser extension that shows synced lyrics from Spotify in a floating Picture-in-Picture window.
+Project ini adalah browser extension untuk Spotify Web yang menampilkan lirik yang tersinkronisasi ke musik dalam jendela floating Picture-in-Picture (PiP). Jadi kamu bisa terus mendengarkan lagu sambil melihat lirik yang bergerak sesuai waktu lagu.
 
-This project is designed for Spotify Web and uses the LRCLIB API to fetch synced lyrics, then displays them in a compact PiP window while the music continues.
+Tujuan utama project ini adalah membuat pengalaman listening Spotify terasa lebih lengkap tanpa harus membuka tab tambahan atau melihat layar penuh.
 
-## Features
+## Fitur utama
 
-- Displays synced lyrics from Spotify tracks
-- Opens lyrics in a floating Picture-in-Picture window
-- Tracks current playback time and syncs lyric highlighting
-- Works with Spotify Web on supported Chromium browsers
-- No backend required; the extension runs locally in the browser
+- Menampilkan lirik synced dari lagu yang sedang diputar di Spotify Web
+- Membuka lirik di jendela PiP yang bisa berdiri sendiri
+- Menyesuaikan highlight lirik mengikuti waktu playback
+- Menampilkan kontrol dasar seperti progress time dan volume di jendela PiP
+- Tidak membutuhkan backend atau server sendiri
 
-## Screenshots
+## Cara kerja project
 
-Add a screenshot here later if you want to showcase the UI on GitHub:
+Project ini bekerja sebagai browser extension Chrome/Edge/Brave:
 
-- Spotify tab with the PiP lyrics button
-- Floating lyrics window with current line highlighted
-- Playback controls and lyric sync indicator
+1. Extension membaca data lagu dari halaman Spotify Web.
+2. Extension mengambil judul lagu, artis, dan durasi dari player yang sedang aktif.
+3. Data tersebut dikirim ke layanan LRCLIB untuk mencari lirik yang cocok.
+4. Lirik yang didapat berupa format LRC lalu diparsing dan dipindahkan ke jendela PiP.
+5. Saat lagu berjalan, posisi waktu diperbarui dan lirik yang aktif berubah sesuai timeline.
 
-## How it works
+## Persyaratan
 
-1. The extension injects a script into the Spotify page.
-2. It reads metadata such as track title, artist, album, and playback state.
-3. It sends the metadata to LRCLIB to look up synced lyrics.
-4. The matched lyrics are parsed from LRC format and displayed in a floating PiP window.
-5. The lyrics are updated as playback time changes.
+- Browser Chromium: Chrome, Edge, atau Brave
+- Spotify Web terbuka di browser
+- Browser yang mendukung Document Picture-in-Picture
+- Koneksi internet untuk mengambil data lirik dari LRCLIB
 
-## Requirements
+## Instalasi lokal (tanpa Chrome Web Store)
 
-- Google Chrome, Microsoft Edge, Brave, or another Chromium-based browser with Document Picture-in-Picture support
-- Spotify Web player open in the browser
-- Internet access to fetch lyrics from the LRCLIB API
+Ini cara paling umum untuk menjalankan extension di komputer kamu tanpa perlu publish ke Chrome Web Store.
 
-## Installation
+### 1. Clone atau download project
 
-1. Download or clone this repository.
-2. Open your browser's extension page:
-   - Chrome: chrome://extensions
-   - Edge: edge://extensions
-   - Brave: brave://extensions
-3. Enable Developer mode.
-4. Click Load unpacked.
-5. Select this project folder.
-6. Open Spotify Web and play a track.
-7. Click the button that appears on the page, or activate the extension flow as implemented in the project.
+```bash
+git clone <url-repository-kamu>
+cd lyrics-pip-final
+```
 
-## Project structure
+Atau cukup download ZIP lalu extract ke folder baru.
+
+### 2. Buka halaman extension browser
+
+- Chrome: chrome://extensions
+- Edge: edge://extensions
+- Brave: brave://extensions
+
+### 3. Aktifkan Developer mode
+
+Nyalakan toggle Developer mode / Pengembang di pojok kanan atas.
+
+### 4. Klik Load unpacked
+
+Klik tombol Load unpacked / Muat paket tidak terkompresi.
+
+### 5. Pilih folder project
+
+Pilih folder tempat project ini berada, misalnya:
+
+```text
+C:\Users\NamaKamu\Downloads\lyrics-pip-final
+```
+
+### 6. Buka Spotify Web
+
+Masuk ke https://open.spotify.com dan putar lagu.
+
+### 7. Jalankan extension
+
+Setelah extension terpasang, biasanya tombol atau mekanisme yang dibuat di halaman Spotify akan aktif. Jika kamu sudah membuka Spotify Web, extension akan mulai mengambil lirik dan membuka PiP sesuai logika yang dibuat di project.
+
+## Struktur project
 
 ```text
 .
@@ -56,92 +81,51 @@ Add a screenshot here later if you want to showcase the UI on GitHub:
 ├── content.js
 ├── main-world.js
 ├── README.md
-└── LICENSE   (optional, add if you want to publish publicly)
+├── LICENSE
+├── .gitignore
+└──
 ```
 
-## Privacy and security review
+## Catatan keamanan dan privasi
 
-### What this extension does
+Project ini masih aman untuk dipakai dan diupload ke GitHub karena tidak menyimpan token, password, atau data login di repo. Namun, ada satu hal yang penting:
 
-- Reads track data from the visible Spotify page only while you are actively using Spotify
-- Accesses the active tab and injects scripts for playback control
-- Calls the LRCLIB API to look up lyrics for the current track
-- Does not create a server, database, or cloud account for the project itself
+- saat kamu memutar lagu, extension akan mengirim metadata lagu seperti judul lagu, artis, dan durasi ke layanan LRCLIB untuk mencari lirik
+- data ini tidak disimpan di repository ini, tetapi dipakai saat request ke API luar
 
-### What it does not do
+Jadi:
 
-- Does not store your Spotify username, password, or account tokens in this repository
-- Does not include a backend service or database
-- Does not require API keys for the extension itself
-- Does not persist lyrics to local storage or a custom server in the current code
+- tidak ada secret di project
+- tidak ada database di sini
+- tidak ada API key yang harus disimpan di repo
+- semua berjalan di browser lokal, bukan backend milik project
 
-### Important note about data flow
+Kalau kamu mau privasi lebih tinggi, kamu bisa mengganti API LRCLIB dengan layanan lirik yang kamu hosting sendiri.
 
-The extension sends metadata such as:
+## Batasan project
 
-- track title
-- artist name
-- album name (if available)
-- playback duration
+- Hanya bekerja di Spotify Web
+- Hanya kompatibel dengan browser yang mendukung PiP
+- Tidak semua lagu punya lirik synced
+- Tergantung pada struktur DOM Spotify, jadi bisa berubah jika Spotify update tampilan
 
-to the external LRCLIB service via HTTPS. This is necessary for lyric lookup.
+## Disclaimer
 
-So the data is not stored inside the project itself, but it is sent to a third-party API when you request lyrics. If you are concerned about privacy, consider:
+Project ini dibuat untuk kebutuhan pribadi dan bukan produk resmi dari Spotify. Ini adalah utility fan-made untuk pengalaman listening di web.
 
-- using a self-hosted lyrics service instead of LRCLIB
-- removing album/duration metadata if you want a minimal request
-- reviewing the LRCLIB privacy policy before public use
+## Lisensi
 
-### Security status
+Project ini menggunakan lisensi MIT.
 
-This project is relatively safe for personal use and for GitHub upload because:
-
-- there are no secrets, credentials, or private tokens in the repository
-- there is no backend or database to leak sensitive data
-- permissions are limited to the active Spotify tab and the required LRC service host
-
-However, it is still a browser extension that interacts with a third-party website and external API, so it should be treated as a local utility rather than a fully enterprise-grade secure app.
-
-## Browser permissions used
-
-From the manifest:
-
-- activeTab: allows access to the active tab when the user interacts with the extension
-- scripting: injects code into the page
-- host permissions: limited to Spotify and the lyrics service domain
-
-This scope is narrow and does not expose broad access to arbitrary sites.
-
-## Limitations
-
-- Only works on Spotify Web and browsers with Picture-in-Picture support
-- Lyrics availability depends on the LRCLIB database
-- Some tracks may not have synced lyrics
-- The extension relies on webpage DOM structure, which can change if Spotify updates the UI
-
-## Future improvements
-
-- add a polished settings panel
-- add support for custom lyrics sources
-- add offline fallback handling
-- improve compatibility with Spotify UI changes
-- add a proper license file and release notes
-
-## Suggested GitHub publishing steps
+## Langkah publish ke GitHub
 
 ```bash
 git init
 git add .
 git commit -m "Initial commit"
 git branch -M main
-git remote add origin <your-github-repo-url>
+git remote add origin <repository-url-kamu>
 git push -u origin main
 ```
 
-## License
-
-No formal license has been added yet. If you plan to publish this to GitHub publicly, it is recommended to add a LICENSE file such as MIT before sharing it widely.
-
-## Disclaimer
-
-This project is a fan utility for Spotify Web and is not affiliated with, endorsed by, or sponsored by Spotify.
+Kalau kamu mau, saya juga bisa bantu bikin versi README yang lebih formal dan lebih menarik untuk GitHub, misalnya dengan banner, screenshot, dan deskripsi yang lebih premium.
