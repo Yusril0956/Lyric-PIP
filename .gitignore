@@ -1,0 +1,18 @@
+# OS / editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Archives / build artifacts
+*.zip
+*.crx
+*.pem
+
+# Local logs
+*.log
+
+# Optional: if you later add package files
+node_modules/
